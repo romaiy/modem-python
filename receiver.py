@@ -1,7 +1,7 @@
 import wave
 
 # Открываем звуковой файл для чтения
-with wave.open('sound_file.wav', 'r') as file:
+with wave.open('Sound.wav', 'r') as file:
     # Получаем параметры звукового файла
     channels, _, framerate, _, _, _ = file.getparams()
 
@@ -20,6 +20,6 @@ with wave.open('sound_file.wav', 'r') as file:
         text += chr(int(binary[i:i+8], 2))
 
 # Записываем текст в новый файл
-with open('text_file_new.txt', 'w', encoding='utf-8') as file:
+with open('NewFile.txt', 'w', encoding='utf-8') as file:
     file.write(text)
 
