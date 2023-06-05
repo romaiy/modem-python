@@ -1,8 +1,10 @@
+import io
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import wave
 import requests
+import json
 
 app = FastAPI()
 app.add_middleware(
@@ -35,12 +37,13 @@ async def convert_to_wav(file: UploadFile = File(...)):
             else:
                 f.writeframes(bytes([255]))
 
-    text = convert()
-    return {"content": text}
+    return FileResponse("Sound.wav", media_type="audio/wav")
 
-def convert():
+@app.post("/receiver")
+async def convert_to_txt(file: bytes = File(...)):
+
     # Открываем звуковой файл для чтения
-    with wave.open('Sound.wav', 'r') as file:
+    with wave.open("Sound.wav", 'r') as file:
         # Получаем параметры звукового файла
         channels, _, framerate, _, _, _ = file.getparams()
 
@@ -61,4 +64,5 @@ def convert():
     # Записываем текст в новый файл
     with open('NewFile.txt', 'w', encoding='utf-8') as file:
         file.write(text)
-    return text
+
+    return {'text': text}
